@@ -9,7 +9,7 @@ class Event extends Model
     // nombre correspondiente a la table en la base de datos
     protected $table = 'events';
     // Atributos que se pueden asignar de manera masiva.
-	protected $fillable = array('name' ,'start_date' ,'description' ,'days_duration' ,'hours_day' ,'start_hour' ,'event_city_id' ,'event_province_id' ,'event_country_id' ,'event_place' ,'include_nearby_places' ,'number_of_attendees', 'assistant_activities_id' ,'logo' ,'slide' ,'screen' ,'banners' ,'flyers' ,'send_invitations_by_mail' ,'analitycs_segment_audience' ,'analitycs_inbound_marketing' ,'analitycs_analyze_scenarios' ,'analitycs_incident_monitoring' ,'analitycs_analyze_results');
+	protected $fillable = array('name' ,'start_date' ,'description' ,'days_duration' ,'hours_day' ,'start_hour' ,'event_city_id' ,'event_province_id' ,'event_country_id' ,'event_place' ,'include_nearby_places' ,'number_of_attendees', 'number_of_rooms', 'assistant_activities_id' ,'include_logo' ,'include_slide' ,'include_screen' ,'include_banners' ,'include_flyers' ,'send_invitations_by_mail' ,'analitycs_segment_audience' ,'analitycs_inbound_marketing' ,'analitycs_analyze_scenarios' ,'analitycs_incident_monitoring' ,'analitycs_analyze_results', 'status_id');
 	// Aquí ponemos los campos que no queremos que se devuelvan en las consultas.
 	protected $hidden = ['created_at','updated_at']; 
 
@@ -41,5 +41,9 @@ class Event extends Model
     public function assistantActivities()
     {
         return $this->belongsTo('App\AssistantActivity');
+    }
+
+    public function activity(){
+       return $this->HasMany('App\Activity');
     }
 }

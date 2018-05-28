@@ -23,5 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AgeRangesTableSeeder::class);
         $this->call(EventFormatsTableSeeder::class);
         $this->call(AssistantActivitiesTableSeeder::class);
+        $this->call(RoomsTableSeeder::class);
     }
 }

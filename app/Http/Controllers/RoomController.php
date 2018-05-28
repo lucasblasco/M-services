@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Province;
+use App\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class ProvinceController extends Controller
+class RoomController extends Controller
 {
     public function index()
     {
-        $obj = Province::all();
+        $obj = Room::all();
         return response()->json([
             'status'=>true, 
             'message'=>"success", 
@@ -20,57 +20,62 @@ class ProvinceController extends Controller
 
     public function store(Request $request)
     {
-        if (!$request->input('name', 'country_id'))
+        if (!$request->input('name'))
         {
-            Log::critical('Error 422: No se pudo crear la provincia. Faltan datos');
+            Log::critical('Error 422: No se pudo crear la sala. Faltan datos');
             return response()->json([
                "status"=>false, 
                "message"=>'Faltan datos necesarios para el proceso de alta.'
             ], 422);                
         }
-        $obj=Province::create($request->all());
+        $obj=Room::create($request->all());
 
-        Log::info('Create provincia: '.$obj->id);
+        Log::info('Create sala: '.$obj->id);
         return response()->json([
             "status"=>true, 
             "message"=>'Registro creado correctamente'
         ], 200);
     }
 
-    public function show(Province $province)
+    public function show(Room $room)
     {
         return response()->json([
             "status"=>true, 
-            "message"=>$province
+            "message"=>$room
         ], 200);
     }
 
-    public function update(Request $request, Province $province)
+    public function update(Request $request, Room $room)
     {
         $name=$request->input('name');
-        $country_id=$request->input('country_id');
+        $description=$request->input('description');
+        $capacity=$request->input('capacity');
             
         if ($request->method() === 'PATCH')
         {
             $band = false;
             if ($name){
-                $province->name = $name;
+                $room->name = $name;
                 $band=true;
             }
-            if ($country_id){
-                $province->country_id = $country_id;
+            if ($description){
+                $room->description = $description;
+                $band=true;
+            }
+            if ($capacity){
+                $room->capacity = $capacity;
                 $band=true;
             }
 
             if ($band){
-                $province->save();
-                Log::info('Update provincia: '.$province->id);
+                $room->save();
+                Log::info('Update sala: '.$room->id);
                 return response()->json([
                     "status"=>true, 
-                    "message"=>$province
+                    "message"=>$room
                 ], 200);
             } else {
-                Log::critical('Error 304: No se pudo modificar la provincia. Parametro: '.$name);
+                Log::critical('Error 304: No se pudo modificar la sala. Parametro: '.$name);
                 return response()->json([
                     "status"=>false, 
                     "message"=>'No se pudo modificar el registro.'
@@ -78,29 +83,30 @@ class ProvinceController extends Controller
             }
         }
 
-        if (!$name || !$country_id)
+        if (!$name || !$description || !$capacity)
         {
-            Log::critical('Error 422: No se pudo actualizar la provincia. Faltan datos');
+            Log::critical('Error 422: No se pudo actualizar la sala. Faltan datos');
             return response()->json([
                 "status"=>false, 
                 "message"=>'Faltan datos necesarios para el proceso de actualización.'
             ], 422);    
         }
 
-        $province->name = $name;
-        $province->country_id = $country_id;
-        $province->save();
-        Log::info('Update provincia: '.$province->id);
+        $room->name = $name;
+        $room->description = $description;
+        $room->capacity = $capacity;
+        $room->save();
+        Log::info('Update sala: '.$room->id);
         return response()->json([
             "status"=>true, 
-            "message"=>$province
+            "message"=>$room
         ], 200);
     }
 
-    public function destroy(Province $province)
+    public function destroy(Room $room)
     {
-        $province->delete();
-        Log::info('Delete ciudad: '.$province->id);
+        $room->delete();
+        Log::info('Delete sala: '.$room->id);
         return response()->json([
             "status"=>true, 
             "message"=>'Registro eliminado correctamente'

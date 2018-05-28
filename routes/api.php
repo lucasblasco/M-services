@@ -34,4 +34,6 @@ Route::group(['middleware' => 'cors'], function(){
 	Route::apiResource('eventFormats', 'EventFormatController');
 	Route::apiResource('ageRanges', 'AgeRangeController');
 	Route::apiResource('assistantActivities', 'AssistantActivityController');
+	Route::apiResource('rooms', 'RoomController');
+	Route::apiResource('activities', 'ActivityController');
 });

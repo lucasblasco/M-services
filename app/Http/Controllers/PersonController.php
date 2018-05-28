@@ -64,6 +64,7 @@ class PersonController extends Controller
         $cityId = $request->input('city_id');
         $provinceId = $request->input('province_id');
         $countryId = $request->input('country_id');
+        $postalCode = $request->input('postal_code');
         $userId = $request->input('user_id');
             
         if ($request->method() === 'PATCH') {
@@ -120,6 +121,10 @@ class PersonController extends Controller
                 $person->countryId = $countryId;
                 $band=true;
             }
+            if ($postalCode){
+                $person->postal_code = $postalCode;
+                $band=true;
+            }
             if ($band){
                 $person->save();
                 Log::info('Update persona: '.$person->id);
@@ -146,6 +151,7 @@ class PersonController extends Controller
             !$cityId ||
             !$provinceId ||
             !$countryId ||
+            !$postalCode ||
             !$email ||
             !$userId) {
             Log::critical('Error 422: No se pudo actualizar la persona. Faltan datos');
@@ -167,6 +173,7 @@ class PersonController extends Controller
         $person->cityId = $cityId;
         $person->provinceId = $provinceId;
         $person->countryId = $countryId;
+        $person->postal_code = $postalCode;
         $person->save();
         Log::info('Update persona: '.$person->id);
         return response()->json([

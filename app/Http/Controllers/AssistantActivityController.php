@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AssistantActivity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AssistantActivityController extends Controller
 {

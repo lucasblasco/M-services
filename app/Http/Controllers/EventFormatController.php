@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\EventFormat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class EventFormatController extends Controller
 {

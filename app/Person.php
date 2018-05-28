@@ -9,7 +9,7 @@ class Person extends Model
     // nombre correspondiente a la table en la base de datos
     protected $table = 'persons';
     // Atributos que se pueden asignar de manera masiva.
-	protected $fillable = array('name', 'surname', 'birth_date', 'document_type_id', 'document_number', 'phone', 'cellphone', 'email', 'study_level_id', 'user_id', 'country_id', 'province_id', 'city_id');
+	protected $fillable = array('name', 'surname', 'birth_date', 'document_type_id', 'document_number', 'phone', 'cellphone', 'email', 'study_level_id', 'user_id', 'country_id', 'province_id', 'city_id', 'postal_code');
 	// Aquí ponemos los campos que no queremos que se devuelvan en las consultas.
 	protected $hidden = ['created_at','updated_at']; 
 

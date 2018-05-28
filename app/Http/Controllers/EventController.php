@@ -31,12 +31,13 @@ class EventController extends Controller
             !$request->input('event_place') || 
             !$request->input('include_nearby_places') || 
             !$request->input('number_of_attendees') || 
+            !$request->input('number_of_rooms') || 
             !$request->input('assistant_activities_id') || 
-            !$request->input('logo') || 
-            !$request->input('slide') || 
-            !$request->input('screen') || 
-            !$request->input('banners') || 
-            !$request->input('flyers') || 
+            !$request->input('include_logo') || 
+            !$request->input('include_slide') || 
+            !$request->input('include_screen') || 
+            !$request->input('include_banners') || 
+            !$request->input('include_flyers') || 
             !$request->input('send_invitations_by_mail') || 
             !$request->input('analitycs_segment_audience') || 
             !$request->input('analitycs_inbound_marketing') || 
@@ -80,19 +81,21 @@ class EventController extends Controller
         $eventCountryId = $request->input('event_country_id'); 
         $eventPlace = $request->input('event_place'); 
         $includeNearbyPlaces = $request->input('include_nearby_places'); 
-        $numberOfAttendees = $request->input('number_of_attendees'); 
+        $numberOfAttendees = $request->input('number_of_attendees');
+        $numberOfRooms = $request->input('number_of_rooms'); 
         $assistantActivitiesId = $request->input('assistant_activities_id');
-        $logo = $request->input('logo'); 
-        $slide = $request->input('slide'); 
-        $screen = $request->input('screen'); 
-        $banners = $request->input('banners'); 
-        $flyers = $request->input('flyers'); 
+        $logo = $request->input('include_logo'); 
+        $slide = $request->input('include_slide'); 
+        $screen = $request->input('include_screen'); 
+        $banners = $request->input('include_banners'); 
+        $flyers = $request->input('include_flyers'); 
         $sendInvitationsByMail = $request->input('send_invitations_by_mail'); 
         $analitycsSegmentAudience = $request->input('analitycs_segment_audience'); 
         $analitycsInboundMarketing = $request->input('analitycs_inbound_marketing'); 
         $analitycsAnalyzeScenarios = $request->input('analitycs_analyze_scenarios'); 
         $analitycsIncidentMonitoring = $request->input('analitycs_incident_monitoring'); 
         $analitycsAnalyzeResults = $request->input('analitycs_analyze_results');
+        $statusId = $request->input('status_id');
             
         if ($request->method() === 'PATCH') {
             $band = false;
@@ -138,6 +141,10 @@ class EventController extends Controller
             }
             if ($numberOfAttendees){
                 $event->number_of_attendees = $numberOfAttendees;
+                $band=true;
+            }
+            if ($numberOfRooms){
+                $event->number_of_rooms = $numberOfRooms;
                 $band=true;
             }
             if ($assistantActivitiesId){
@@ -188,6 +195,10 @@ class EventController extends Controller
                 $event->analitycs_analyze_results = $analitycsAnalyzeResults;
                 $band=true;
             }
+            if ($statusId){
+                $event->status_id = $statusId;
+                $band=true;
+            }
            
             if ($band){
                 $event->save();
@@ -216,6 +227,7 @@ class EventController extends Controller
             !$eventPlace                  || 
             !$encludeNearbyPlaces         || 
             !$numberOfAttendees           || 
+            !$numberOfRooms               ||
             !$assistantActivitiesId       ||
             !$logo                        || 
             !$slide                       || 
@@ -227,6 +239,7 @@ class EventController extends Controller
             !$analitycsInboundMarketing   || 
             !$analitycsAnalyzeScenarios   || 
             !$analitycsIncidentMonitoring || 
+            !$statusId                    || 
             !$analitycsAnalyzeResults) {
             Log::critical('Error 422: No se pudo actualizar el evento. Faltan datos');
             return response()->json([
@@ -245,6 +258,7 @@ class EventController extends Controller
         $event->event_place = $eventPlace;
         $event->include_nearby_places = $includeNearbyPlaces;
         $event->number_of_attendees = $numberOfAttendees;
+        $event->number_of_rooms = $numberOfRooms;
         $event->assistant_activities_id = $assistantActivitiesId;
         $event->logo = $logo;
         $event->slide = $slide;
@@ -257,6 +271,7 @@ class EventController extends Controller
         $event->send_invitations_by_mail = $analitycsAnalyzeScenarios;
         $event->analitycs_incident_monitoring = $analitycsIncidentMonitoring;
         $event->analitycs_analyze_results = $analitycsAnalyzeResults;        
+        $event->status_id = $statusId;        
         $event->save();
         Log::info('Update evento: '.$event->id);
         return response()->json([
