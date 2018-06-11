@@ -23,7 +23,7 @@ class CreateActivitiesTable extends Migration
             $table->integer('day');
             $table->time('start_time');
             $table->time('end_time');
-            $table->integer('status_id')->default(1);
+            $table->integer('status_id')->default(1)->unsigned();
             $table->foreign('event_id')->references('id')->on('events');
             $table->foreign('room_id')->references('id')->on('rooms');   
             $table->foreign('event_format_id')->references('id')->on('event_formats');

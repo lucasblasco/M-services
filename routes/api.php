@@ -18,22 +18,25 @@ use Illuminate\Http\Request;
 });*/
 
 Route::group(['middleware' => 'cors'], function(){
-	Auth::routes();
-	Route::apiResource('users', 'UserController')->middleware('auth:api');
-	Route::apiResource('interests', 'InterestController');
-	Route::apiResource('documentTypes', 'documentTypeController');
-	Route::apiResource('professions', 'ProfessionController');
-	Route::apiResource('accounts', 'AccountController');
-	Route::apiResource('jobs', 'UserController');
-	Route::apiResource('studyLevels', 'StudyLevelController');
-	Route::apiResource('persons', 'PersonController');
-	Route::apiResource('cities', 'CityController');
-	Route::apiResource('countries', 'CountryController');
-	Route::apiResource('provinces', 'ProvinceController');
-	Route::apiResource('events', 'EventController');
-	Route::apiResource('eventFormats', 'EventFormatController');
-	Route::apiResource('ageRanges', 'AgeRangeController');
-	Route::apiResource('assistantActivities', 'AssistantActivityController');
-	Route::apiResource('rooms', 'RoomController');
-	Route::apiResource('activities', 'ActivityController');
+	Auth::routes();	
+	Route::post('/registro', 'UserController@register');
+	Route::group(['middleware' => 'auth:api'], function(){
+		Route::apiResource('users', 'UserController');
+		Route::apiResource('interests', 'InterestController');
+		Route::apiResource('documentTypes', 'documentTypeController');
+		Route::apiResource('professions', 'ProfessionController');
+		Route::apiResource('accounts', 'AccountController');
+		Route::apiResource('jobs', 'UserController');
+		Route::apiResource('studyLevels', 'StudyLevelController');
+		Route::apiResource('persons', 'PersonController');
+		Route::apiResource('cities', 'CityController');
+		Route::apiResource('countries', 'CountryController');
+		Route::apiResource('provinces', 'ProvinceController');
+		Route::apiResource('events', 'EventController');
+		Route::apiResource('eventFormats', 'EventFormatController');
+		Route::apiResource('ageRanges', 'AgeRangeController');
+		Route::apiResource('assistantActivities', 'AssistantActivityController');
+		Route::apiResource('rooms', 'RoomController');
+		Route::apiResource('activities', 'ActivityController');
+	});
 });

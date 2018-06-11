@@ -18,7 +18,7 @@ class CreatePersonTable extends Migration
             $table->string('name');
             $table->string('surname');
             $table->datetime('birth_date');
-            $table->integer('document_type_id')->unsigned();
+            $table->integer('document_type_id')->unsigned()->default(1);
             $table->integer('study_level_id')->unsigned()->nullable();
             $table->string('document_number')->unique();
             $table->string('phone')->nullable();
@@ -28,6 +28,11 @@ class CreatePersonTable extends Migration
             $table->integer('province_id')->unsigned()->nullable();
             $table->integer('country_id')->unsigned()->nullable();
             $table->string('postal_code')->nullable();
+            $table->string('street')->nullable();
+            $table->string('number')->nullable();
+            $table->string('floor')->nullable();
+            $table->string('dept')->nullable();
+            $table->boolean('share_data');
             $table->timestamps();
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');

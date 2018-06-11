@@ -5,102 +5,86 @@ namespace App\Http\Controllers;
 use App\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
 {
     public function index()
     {
-        $obj = Account::all();
-        return response()->json([
-            'status'=>true, 
-            'message'=>"success", 
-            'data'=>$obj
-        ], 200);
+        return $this->sendResponse(Account::all(), 'Cuentas recuperadas correctamente');
     }
 
     public function store(Request $request)
     {
-        if (!$request->input('name'))
-        {
-            Log::critical('Error 422: No se pudo crear la cuenta. Faltan datos');
-            return response()->json([
-                "status"=>false, 
-                "message"=>'Faltan datos necesarios para el proceso de alta.'
-            ], 422);                
-        }
+        $input = $request->all();
 
-        $newObj=Account::create($request->all());
-        Log::info('Create cuenta: '.$newObj->id);
-        return response()->json([
-            "status"=>true, 
-            "message"=>'Registro creado correctamente'
-        ], 200);
+        $validator = Validator::make($input, [
+            'name' => 'required'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Error de validación. Faltan datos necesarios para el proceso de alta.', $validator->errors());       
+        }                  
+
+        $obj = Account::create($input);
+        Log::info('Create cuenta: '.$obj->toArray);
+        return $this->sendResponse($obj, 'Registro creado correctamente');
     }
 
     public function show(Account $account)
     {
-        return response()->json([
-            "status"=>true, 
-            "message"=>$account
-        ], 200);
+        if (is_null($account)) {
+            return $this->sendError('La cuenta no existe');
+        }
+        return $this->sendResponse($account, 'Cuenta recuperada correctamente');
     }
 
     public function update(Request $request, Account $account)
     {
-        $name = $request->input('name');
-        $enabled = $request->input('enabled');
+        $input = $request->all();
+
+
+        $validator = Validator::make($input, [
+            'name' => 'required',
+            'enabled' => 'boolean'
+        ]);
+
+        if($validator->fails()){
+             return $this->sendError('Error de validación. Faltan datos necesarios para el proceso de modificación.', $validator->errors());       
+        }
         
         if ($request->method() === 'PATCH') {
             $band = false;
-            if ($name){
-                $account->name = $name;
+            if ($input['name']){
+                $account->name = $input['name'];
                 $band=true;
             }
-            if ($enabled){
-                $account->enabled = $enabled;
+            if ($input['name']){
+                $account->enabled = $input['enabled'];
                 $band=true;
             }
 
             if ($band){
                 $account->save();
                 Log::info('Update cuenta: '.$account->id);
-                return response()->json([
-                    "status"=>true, 
-                    "message"=>$account
-                ], 200);
-            } else {
-                Log::critical('Error 304: No se pudo modificar la cuenta. Parametro: '.$account->name);
-                return response()->json([
-                    "status"=>false, 
-                    "message"=>'No se pudo modificar el registro.'
-                ], 304);
-            }
+                return $this->sendResponse($account, 'Registro modificado correctamente');
+            } else 
+                $this->sendError('No se pudo modificar el registro.', 304);            
         }
         //Es PUT
-        if (!$name || !$enabled) {
-            Log::critical('Error 422: No se pudo actualizar la cuenta. Faltan datos.');
-            return response()->json([
-                "status"=>false, 
-                "message"=>'Faltan datos necesarios para el proceso de actualización.'
-            ], 422);    
+        if (!$input['name'] || !$input['enabled']) {
+            $this->sendError('Faltan datos necesarios para el proceso de modificación.', $validator->errors());  
         }
-        $account->name = $name;
-        $account->enabled = $enabled;
+        $account->name = $input['name'];
+        $account->enabled = $input['enabled'];
         $account->save();
         Log::info('Update cuenta: '.$account->id);
-        return response()->json([
-            "status"=>true, 
-            "message"=>$account
-        ], 200);
+        return $this->sendResponse($account, 'Cuenta modificado correctamente');
     }
 
     public function destroy(Account $account)
     {         
         $account->delete();
         Log::info('Delete cuenta: '.$account->id);
-        return response()->json([
-            "status"=>true, 
-            "message"=>'Registro eliminado correctamente'
-        ], 200); 
+        return $this->sendResponse($account, 'Registro eliminado correctamente');
     }
 }

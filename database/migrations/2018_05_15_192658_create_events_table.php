@@ -40,7 +40,7 @@ class CreateEventsTable extends Migration
             $table->boolean('analitycs_analyze_scenarios');
             $table->boolean('analitycs_incident_monitoring');
             $table->boolean('analitycs_analyze_results');
-            $table->integer('status_id')->default(1);
+            $table->integer('status_id')->default(1)->unsigned();
             $table->foreign('event_city_id')->references('id')->on('cities');
             $table->foreign('event_province_id')->references('id')->on('provinces');
             $table->foreign('event_country_id')->references('id')->on('countries');
