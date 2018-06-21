@@ -41,5 +41,5 @@ class Controller extends BaseController
         }
         Log::critical('Error '.$code.': '.$response['message']);        
         return response()->json($response, $code);
-    }
+    }    
 }

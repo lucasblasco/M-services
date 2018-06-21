@@ -19,8 +19,9 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => 'cors'], function(){
 	Auth::routes();	
-	Route::post('/registro', 'UserController@register');
-	Route::group(['middleware' => 'auth:api'], function(){
+	Route::post('registro', 'UserController@register');
+	Route::get('partnerContact', 'PartnerContactController@send');
+	Route::group(['middleware' => 'auth:api'], function(){		
 		Route::apiResource('users', 'UserController');
 		Route::apiResource('interests', 'InterestController');
 		Route::apiResource('documentTypes', 'documentTypeController');

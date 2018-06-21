@@ -19,12 +19,19 @@ class User extends Authenticatable
         'name', 'email', 'password', 'enabled', 'linkedin_id'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function person(){
+       return $this->HasMany('App\Person');
+    }
+
+    public function event(){
+       return $this->HasMany('App\Event');
+    }
+
+    public function organization(){
+       return $this->HasMany('App\Organization');
+    }
 }
