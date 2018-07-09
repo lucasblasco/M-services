@@ -7,6 +7,6 @@ class RoomsTableSeeder extends Seeder
 {
     public function run()
     {
-        factory(Room::class, 25)->create();
+        DB::table('rooms')->insert(['name'=> 'Sala principal', 'description' => 'Sala principal', 'capacity' => 1000]);
     }
 }

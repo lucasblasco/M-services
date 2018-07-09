@@ -10,15 +10,10 @@ class CountryController extends Controller
 {
     public function index()
     {
-        $obj = Country::all();
-        return response()->json([
-            'status'=>true, 
-            'message'=>"success", 
-            'data'=>$obj
-        ], 200);
+       return $this->sendResponse(Country::all(), 'paises recuperados correctamente');
     }
 
-    public function store(Request $request)
+   /* public function store(Request $request)
     {
         if (!$request->input('name'))
         {
@@ -36,16 +31,16 @@ class CountryController extends Controller
             "message"=>'Registro creado correctamente'
         ], 200);
     }
-
+*/
     public function show(Country $country)
     {
-        return response()->json([
-            "status"=>true, 
-            "message"=>$country
-        ], 200);
+        if (is_null($country)) {
+            return $this->sendError('El pais no existe');
+        }
+        return $this->sendResponse($country, 'Pais recuperado correctamente');
     }
 
-    public function update(Request $request, Country $country)
+/*    public function update(Request $request, Country $country)
     {
         $name=$request->input('name');
         $demonym=$request->input('demonym');
@@ -105,5 +100,5 @@ class CountryController extends Controller
             "status"=>true, 
             "message"=>'Registro eliminado correctamente'
         ], 200); 
-    }
+    }*/
 }

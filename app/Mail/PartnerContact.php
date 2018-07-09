@@ -23,12 +23,7 @@ class PartnerContact extends Mailable
         $this->email = $email;
         $this->user = $user;
     }
-
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
+    
     public function build()
     {
         return $this->view('mails.partner_contact');

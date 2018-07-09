@@ -10,15 +10,10 @@ class ProfessionController extends Controller
 {
     public function index()
     {
-        $obj = Profession::all();
-        return response()->json([
-            'status'=>true, 
-            'message'=>"success", 
-            'data'=>$obj
-        ], 200);
+        return $this->sendResponse(Profession::all(), 'profesiones recuperadas correctamente');
     }
 
-    public function store(Request $request)
+    /*public function store(Request $request)
     {
         if (!$request->input('name'))
         {
@@ -35,17 +30,17 @@ class ProfessionController extends Controller
             "status"=>true, 
             "message"=>'Registro creado correctamente'
         ], 200);
-    }
+    }*/
 
     public function show(Profession $profession)
     {
-        return response()->json([
-            "status"=>true, 
-            "message"=>$profession
-        ], 200);
+        if (is_null($profession)) {
+            return $this->sendError('La profesion no existe');
+        }
+        return $this->sendResponse($profession, 'Profesion recuperada correctamente');
     }
 
-    public function update(Request $request, Profession $profession)
+   /* public function update(Request $request, Profession $profession)
     {
         $name=$request->input('name');
             
@@ -99,5 +94,5 @@ class ProfessionController extends Controller
             "status"=>true, 
             "message"=>'Registro eliminado correctamente'
         ], 200); 
-    }
+    }*/
 }

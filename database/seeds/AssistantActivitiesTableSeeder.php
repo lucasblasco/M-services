@@ -12,6 +12,8 @@ class AssistantActivitiesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(AssistantActivity::class, 3)->create();
+        DB::table('assistant_activities')->insert(['name'=> 'Profesional']);
+        DB::table('assistant_activities')->insert(['name'=> 'No Profesional']);
+        DB::table('assistant_activities')->insert(['name'=> 'Ambos']);
     }
 }

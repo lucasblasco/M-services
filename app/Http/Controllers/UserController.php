@@ -169,7 +169,8 @@ class UserController extends Controller
             $newPerson = Person::create($person);
             return $this->sendResponse($newPerson, 'Registro creado correctamente');
         }
-        
+
+
         
         /*
         $email = $input['email'];
@@ -229,4 +230,5 @@ class UserController extends Controller
             ], 200);
         }*/
     }
+
 }

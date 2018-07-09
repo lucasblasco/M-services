@@ -15,7 +15,14 @@ class Organization extends Model
 
 	public function accounts()
     {
-        return $this->belongsToMany('App\Account', 'account_organization')->withTimestamps();
+        return $this->belongsToMany('App\Account') 
+            ->withPivot('account_organization', 'value');
+            ->withTimestamps();
+    }
+
+    public function interests()
+    {
+        return $this->belongsToMany('App\Interest', 'interest_organization')->withTimestamps();
     }
 
     public function country()

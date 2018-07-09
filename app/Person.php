@@ -9,7 +9,8 @@ class Person extends Model
     // nombre correspondiente a la table en la base de datos
     protected $table = 'persons';
     // Atributos que se pueden asignar de manera masiva.
-	protected $fillable = array('name', 'surname', 'birth_date', 'document_type_id', 'document_number', 'phone', 'cellphone', 'email', 'study_level_id', 'user_id', 'country_id', 'province_id', 'city_id', 'postal_code');
+	protected $fillable = array('name', 'surname', 'birth_date', 'document_type_id', 'document_number', 'phone', 'email', 'study_level_id', 'profession_id', 'user_id', 'country_id', 'province', 'city', 'postal_code', 'street', 'number', 'floor', 'dept', 'share_data', 'avatar');
+
 	// Aquí ponemos los campos que no queremos que se devuelvan en las consultas.
 	protected $hidden = ['created_at','updated_at']; 
 
@@ -28,9 +29,10 @@ class Person extends Model
         return $this->belongsTo('App\StudyLevel');
     }
 
-    public function professions()
+    public function profession()
     {
-        return $this->belongsToMany('App\Profession', 'person_profession')->withTimestamps();
+        //return $this->belongsToMany('App\Profession', 'person_profession')->withTimestamps();
+        return $this->belongsTo('App\Profession');
     }
 
     public function interests()
@@ -40,7 +42,9 @@ class Person extends Model
 
     public function accounts()
     {
-        return $this->belongsToMany('App\Account', 'account_person')->withTimestamps();
+        return $this->belongsToMany('App\Account', 'account_person')
+            ->withPivot('name')
+            ->withTimestamps();
     }
 
     public function jobs()
@@ -62,5 +66,15 @@ class Person extends Model
     {
         return $this->belongsTo('App\City');
     }
+
+    public function events()
+    {
+        return $this->belongsToMany('App\Event', 'event_person')->withTimestamps();
+    }
+
+    public function activities()
+    {
+        return $this->belongsToMany('App\Activity', 'activity_person')->withTimestamps();
+    } 
 }
 

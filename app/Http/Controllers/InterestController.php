@@ -5,17 +5,13 @@ namespace App\Http\Controllers;
 use App\Interest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class InterestController extends Controller
 {
     public function index()
     {
-        $obj = Interest::all();
-        return response()->json([
-            'status'=>true, 
-            'message'=>"success", 
-            'data'=>$obj
-        ], 200);
+        return $this->sendResponse(Interest::all(), 'Intereses recuperados correctamente');
     }
 
     public function store(Request $request)

@@ -5,17 +5,22 @@ namespace App\Http\Controllers;
 use App\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
 
 class EventController extends Controller
 {
     public function index()
     {
-        $obj = Event::all();
-        return response()->json([
-            'status'=>true, 
-            'message'=>"success", 
-            'data'=>$obj
-        ], 200);
+        $events = Event::all();
+        foreach ($events as $event){
+            $event->accounts; 
+            $event->status;
+            $event->organizers;
+            $event->partners;
+        }
+        return $this->sendResponse($events, 'Eventos recuperados correctamente');
     }
 
     public function store(Request $request)
@@ -62,10 +67,11 @@ class EventController extends Controller
 
     public function show(Event $event)
     {
-        return response()->json([
-            "status"=>true, 
-            "message"=>$person
-        ], 200);
+        $event->accounts;
+        $event->status;
+        $event->organizers;
+        $event->partners;
+        return $this->sendResponse($event, 'Evento recuperado correctamente');
     }
 
     public function update(Request $request, Event $event)

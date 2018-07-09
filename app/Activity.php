@@ -11,7 +11,7 @@ class Activity extends Model
     // Atributos que se pueden asignar de manera masiva.
 	protected $fillable = array('name', 'description', 'event_id', 'room_id', 'event_format_id', 'day', 'start_time', 'end_time', 'status_id');
 	// Aquí ponemos los campos que no queremos que se devuelvan en las consultas.
-	protected $hidden = ['created_at','updated_at'];
+	protected $hidden = ['created_at','updated_at'];  
     
     public function status()
     {
@@ -31,5 +31,15 @@ class Activity extends Model
     public function eventFormat()
     {
         return $this->belongsTo('App\EventFormat');
+    }
+
+    public function speakers()
+    {
+        return $this->belongsToMany('App\Speaker', 'activity_speaker')->withTimestamps();
+    }
+
+    public function persons()
+    {
+        return $this->belongsToMany('App\Person', 'activity_person')->withTimestamps();
     }
 }

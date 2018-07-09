@@ -5,51 +5,77 @@ namespace App\Http\Controllers;
 use App\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
 
 class ActivityController extends Controller
 {
     public function index()
     {
-        $obj = Activity::all();
-        return response()->json([
-            'status'=>true, 
-            'message'=>"success", 
-            'data'=>$obj
-        ], 200);
+        $activities = Activity::all()->orderBy('start_time', 'asc')->get();
+        foreach ($activities as $activity){
+            $activity->speakers; 
+            $activity->status;
+            $activity->eventFormat;
+            $activity->room;
+            $activity->start_time = substr($activity->start_time, 0, 5);
+            $activity->end_time = substr($activity->end_time, 0, 5);
+        }
+        return $this->sendResponse($activities, 'Actividades recuperadas correctamente');
+    }
+
+    public function indexByEvent(Request $request)
+    {
+        $event = $request->input('event_id');   
+        Log::info($event);     
+        $activities = Activity::where('event_id','=',$event)->orderBy('start_time', 'asc')->get();
+        foreach ($activities as $activity){
+            $activity->speakers; 
+            $activity->status;
+            $activity->eventFormat;
+            $activity->room;
+            $activity->start_time = substr($activity->start_time, 0, 5);
+            $activity->end_time = substr($activity->end_time, 0, 5);
+        }
+        return $this->sendResponse($activities, 'Actividades recuperadas correctamente');
     }
 
     public function store(Request $request)
     {
-        if (!$request->input('name') ||
-            !$request->input('description') ||
-            !$request->input('event_id') ||
-            !$request->input('room_id') ||
-            !$request->input('event_format_id') ||
-            !$request->input('day') ||
-            !$request->input('start_time') ||
-            !$request->input('end_time'))
-        {
-            Log::critical('Error 422: No se pudo crear la actividad. Faltan datos');
-            return response()->json([
-                "status"=>false, 
-                "message"=>'Faltan datos necesarios para el proceso de alta.'
-            ], 422);                
-        }
-        //$request->input('password') = bcrypt($request->input('password'));
-        $newObj=Activity::create($request->all());
-        Log::info('Create actividad: '.$newObj->id);
-        return response()->json([
-            "status"=>true, 
-            "message"=>'Registro creado correctamente'
-        ], 200);
+        $input = $request->all();
+
+        $validator = Validator::make($input, [
+            'name' => 'required',
+            'description' => 'required',
+            'event_id' => 'required',
+            'room_id' => 'required',
+            'event_format_id' => 'required',
+            'day' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Error de validación. Faltan datos necesarios para el proceso de alta.', $validator->errors());    
+        }           
+
+        $newObj = Activity::create($input);
+        Log::info('Create actividad: '.$newObj->toArray);
+        return $this->sendResponse($newObj, 'Registro creado correctamente');
     }
 
     public function show(Activity $activity)
     {
-        return response()->json([
-            "status"=>true, 
-            "message"=>$activity
-        ], 200);
+        if (is_null($activity)) {
+            return $this->sendError('La actividad no existe');            
+        }
+        $activity->speakers; 
+            $activity->status;
+            $activity->eventFormat;
+            $activity->room;
+            $activity->start_time = substr($activity->start_time, 0, 5);
+            $activity->end_time = substr($activity->end_time, 0, 5);
+        return $this->sendResponse($activity, 'Actividad recuperada correctamente');
     }
 
     public function update(Request $request, Activity $activity)
@@ -158,9 +184,6 @@ class ActivityController extends Controller
     {
         $activity->delete();
         Log::info('Delete actividad: '.$activity->id);
-        return response()->json([
-            "status"=>true, 
-            "message"=>'Registro eliminado correctamente'
-        ], 200); 
+        return $this->sendResponse($activity, 'Registro eliminado correctamente');
     }
 }

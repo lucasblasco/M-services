@@ -15,7 +15,7 @@ class PartnerContactController extends Controller
     public function send(Request $request)
     {
     	$input = $request->all();
-
+        
         $validator = Validator::make($input, [
             'name' => 'required',
             'email' => 'required',
@@ -38,13 +38,9 @@ class PartnerContactController extends Controller
 
         $user = new User();
        // $user = new App\User::find($event->user_id);
-        $user = User::find(9);
+        $user = User::find(2);
 
         Mail::to($user->email)->send(new PartnerContact($user->name, $name, $cellphone, $email));
-
-        return response()->json([
-            'status'=>true, 
-            'message'=>"success"
-        ], 200);
+        return $this->sendResponse($user, 'Email enviado correctamente');
     }
 }

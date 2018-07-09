@@ -13,7 +13,7 @@ class CitiesTableSeeder extends Seeder
     public function run()
     {
         DB::table('cities')->insert(['name'=> 'Trenque Lauquen', 'province_id' => 1]);
-		DB::table('cities')->insert(['name'=> 'A. Alsina', 'province_id' => 1]);
+		/*DB::table('cities')->insert(['name'=> 'A. Alsina', 'province_id' => 1]);
 		DB::table('cities')->insert(['name'=> 'A. Gonzáles Cháves', 'province_id' => 1]);
 		DB::table('cities')->insert(['name'=> 'Aguas Verdes', 'province_id' => 1]);
 		DB::table('cities')->insert(['name'=> 'Alberti', 'province_id' => 1]);
@@ -2404,6 +2404,6 @@ class CitiesTableSeeder extends Seeder
 		DB::table('cities')->insert(['name'=> 'Nueva Plata', 'province_id' => 1]);
 		DB::table('cities')->insert(['name'=> 'Chiclana', 'province_id' => 1]);
 		DB::table('cities')->insert(['name'=> 'Capitán Castro', 'province_id' => 1]);
-		DB::table('cities')->insert(['name'=> 'Primera Junta', 'province_id' => 1]);
+		DB::table('cities')->insert(['name'=> 'Primera Junta', 'province_id' => 1]);*/
     }
 }

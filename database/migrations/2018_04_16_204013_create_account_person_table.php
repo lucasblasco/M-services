@@ -17,6 +17,7 @@ class CreateAccountPersonTable extends Migration
             $table->increments('id');
             $table->integer('person_id')->unsigned();
             $table->integer('account_id')->unsigned();
+            $table->string('name');
             $table->timestamps();
             $table->foreign('person_id')->references('id')->on('persons');
             $table->foreign('account_id')->references('id')->on('accounts');        

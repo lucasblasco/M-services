@@ -18,6 +18,11 @@ class Interest extends Model
         return $this->belongsToMany('App\Person', 'interest_person');
     }
 
+    public function organizations()
+    {
+        return $this->belongsToMany('App\Person', 'interest_organization');
+    }
+
     public function events()
     {
         return $this->belongsToMany('App\Event', 'event_interest');

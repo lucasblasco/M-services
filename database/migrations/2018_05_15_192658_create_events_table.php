@@ -20,7 +20,7 @@ class CreateEventsTable extends Migration
             $table->text('description');
             $table->integer('days_duration');            
             $table->integer('hours_day');
-            $table->integer('start_hour');
+            $table->time('start_hour');
             $table->integer('event_city_id')->unsigned();
             $table->integer('event_province_id')->unsigned()->nullable();
             $table->integer('event_country_id')->unsigned();
