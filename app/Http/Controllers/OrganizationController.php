@@ -24,8 +24,8 @@ class OrganizationController extends Controller
             !$request->input('phone') ||
             !$request->input('email') ||
             !$request->input('city_id') ||
-            !$request->input('province_id') ||
-            !$request->input('country_id') ||
+            !$request->input('province') ||
+            !$request->input('country') ||
             !$request->input('postal_code') ||
             !$request->input('street') ||
             !$request->input('number') ||

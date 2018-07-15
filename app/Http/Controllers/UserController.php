@@ -2,233 +2,364 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Person;
+use App\User;
+use App\Event;
+use App\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use JWTAuth;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-        $obj = User::all();
-        return response()->json([
-            'status'=>true, 
-            'message'=>"success", 
-            'data'=>$obj
-        ], 200);
+    function getObject(User $user) : User {
+        $user->person;
+        $user->organization;
+        $user->studyLevel;
+        $user->profession;
+        $user->interests;
+        $user->accounts;
+
+        if($user->person){
+            $user->person->studyLevel;
+            $user->person->profession;
+            $user->person->country;
+            $date = new Carbon($user->person->birth_date);
+            $user->person->birth_date = $date->toDateString();
+        }
+
+        if($user->organization){
+            $user->organization->country;
+        }
+
+        return $user;
     }
 
-    public function store(Request $request)
+
+    public function index()
     {
-        if (!$request->input('name') ||
-            !$request->input('password') ||
-            !$request->input('email'))
-        {
-            Log::critical('Error 422: No se pudo crear el usuario. Faltan datos');
-            return response()->json([
-                "status"=>false, 
-                "message"=>'Faltan datos necesarios para el proceso de alta.'
-            ], 422);                
+        $users = User::all();
+        foreach ($users as $user) {
+            $user = $this->getObject($user);
         }
-        //$request->input('password') = bcrypt($request->input('password'));
-        $newObj=User::create($request->all());
-        Log::info('Create usuario: '.$newObj->id);
-        return response()->json([
-            "status"=>true, 
-            "message"=>'Registro creado correctamente'
-        ], 200);
+        return $this->sendResponse($users, 'Usuarios recuperadas correctamente');
     }
 
     public function show(User $user)
     {
-        return response()->json([
-            "status"=>true, 
-            "message"=>$user
-        ], 200);
+        return $this->sendResponse($this->getObject($user), 'Usuario recuperado correctamente');      
     }
 
-    public function update(Request $request, User $user)
+    public function subscribeEvent(Request $request)
     {
-        $name=$request->input('name');
-        $email=$request->input('email');
-        $password=$request->input('password');
-        $enabled=$request->input('enabled');
-        $linkedinId=$request->input('linkedin_id');
-            
-        if ($request->method() === 'PATCH')
-        {
-            $band = false;
-            if ($name){
-                $user->name = $name;
-                $band=true;
-            }
-            if ($email){
-                $user->email = $email;
-                $band=true;
-            }
-            if ($password){
-                $user->password = bcrypt($password);
-                $band=true;
-            }
-            if ($enabled){
-                $user->enabled = $enabled;
-                $band=true;
-            }
-            if ($linkedinId){
-                $user->linkedinId = $linkedinId;
-                $band=true;
-            }
-
-            if ($band){
-                $user->save();
-                Log::info('Update usuario: '.$user->id);
-                return response()->json([
-                    "status"=>true, 
-                    "message"=>$user
-                ], 200);
-            } else {
-                Log::critical('Error 304: No se pudo modificar el usuario. Parametro: '.$name);
-                return response()->json([
-                    "status"=>false, 
-                    "message"=>'No se pudo modificar el registro.'
-                ], 304);
-            }
-        }
-
-        if (!$name || 
-            !$email ||
-            !$password ||
-            !$enabled ||
-            !$linkedinId)
-        {
-            Log::critical('Error 422: No se pudo actualizar el usuario. Faltan datos');
-            return response()->json([
-                "status"=>false, 
-                "message"=>'Faltan datos necesarios para el proceso de actualización.'
-            ], 422);    
-        }
-
-        $user->name = $name;
-        $user->email = $email;
-        $user->password = bcrypt($password);
-        $user->enabled = $enabled;
-        $user->linkedinId = $linkedinId;
-        $user->save();
-        Log::info('Update usuario: '.$user->id);
-        return response()->json([
-            "status"=>true, 
-            "message"=>$user
-        ], 200);
-    }
-
-    public function destroy(User $user)
-    {
-        $user->delete();
-        Log::info('Delete usuario: '.$user->id);
-        return response()->json([
-            "status"=>true, 
-            "message"=>'Registro eliminado correctamente'
-        ], 200); 
-    }
-
-    public function register(Request $request){
         $input = $request->all();
-        $user = $input['user'];
-        $person = $input['person'];
+
+        $user = JWTAuth::authenticate($request->bearerToken());
+        if (is_null($user)) {
+            return $this->sendError('usuario no autorizado.');
+        }
+
+        $validatedData = Validator::make($input, [
+            'event_id' => 'required',
+        ], [
+            'event_id.required' => 'El evento es requerido',
+        ]);       
+
+        if ($validatedData->fails()) {
+            return $this->sendError('Error de validacion.', $validatedData->errors());
+            Log::error($validatedData->errors());
+            return;
+        }
+
+        $event_id = $input['event_id'];
+
+        if (!is_null($user->events)) {
+            foreach ($user->events as $event) {
+                if ($event->id == $event_id) {
+                    return $this->sendError('Ya se encuentra participando del evento.');
+                }
+
+            }
+        }
+
+        $user->events()->attach($event_id);
+        return $this->sendResponse(null, '¡Ya estás participando del evento!');
+    }
+
+    public function unsubscribeEvent(Request $request)
+    {
+        $input = $request->all();
+
+        $user = JWTAuth::authenticate($request->bearerToken());
+        if (is_null($user)) {
+            return $this->sendError('usuario no autorizado.');
+        }
+
+        $validatedData = Validator::make($input, [
+            'event_id' => 'required',
+        ], [
+            'event_id.required' => 'El evento es requerido',
+        ]);       
+
+        if ($validatedData->fails()) {
+            return $this->sendError('Error de validacion.', $validatedData->errors());
+            Log::error($validatedData->errors());
+            return;
+        }
+
+        $event_id = $input['event_id'];
+
+        if (!is_null($user->events)) {
+            foreach ($user->events as $event) {
+                if ($event->id == $event_id) {
+                    $user->events()->detach($event_id);
+                    $activities = $event->activities;
+                    $user->activities()->detach($activities);
+                    return $this->sendResponse(null, 'Dejaste de participar del evento.');
+                }
+            }
+        }
+        return $this->sendError('No se encuentra inscripto en el evento.');
+    }
+
+    public function subscribeActivity(Request $request)
+    {
+        $input = $request->all();
+
+        $user = JWTAuth::authenticate($request->bearerToken());
+        if (is_null($user)) {
+            return $this->sendError('usuario no autorizado.');
+        }
+
+        $validatedData = Validator::make($input, [
+            'activity_id' => 'required',
+        ], [
+            'activity_id.required' => 'La actividad es requerida',
+        ]);
         
-        $user['name'] = $person['name'].' '.$person['surname'];
-        
-        $validatedData = Validator::make($user, [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|min:3|confirmed',
-            'password_confirmation' => 'required|min:3|same:password'
-        ],[
-            'email.required' => 'El email es requerido',
-            'email.unique' => 'Este email ya esta registrado con otro usuario',
-            'password.confirmed' => 'Las contraseñas no coinciden'
+        if ($validatedData->fails()) {
+            return $this->sendError('Error de validacion.', $validatedData->errors());
+            Log::error($validatedData->errors());
+            return;
+        }
+
+        $activity_id = $input['activity_id'];
+
+        $activity = Activity::find($activity_id);
+
+        $event = $activity->event()->first();
+
+        if (is_null($user->events)) {
+            return $this->sendError('Debe inscribirse al evento para asistir a una actividad');
+        }
+
+        $existEvent = false;
+        foreach ($user->events as $ev) {
+            if ($ev->id == $event->id) {
+                $existEvent = true;
+            }
+
+        }
+
+        if (!$existEvent) {
+            return $this->sendError('Debe inscribirse al evento para asistir a una actividad');
+        }
+
+        if (!is_null($user->activities)) {
+            foreach ($user->activities as $act) {
+                if ($act->id == $activity_id) {
+                    return $this->sendError('Ya se encuentra inscripto en la actividad.');
+                }
+
+            }
+        }
+
+        $user->activities()->attach($activity_id);
+
+        return $this->sendResponse(null, '¡Ya estás inscripto en la actividad!');
+    }
+
+    public function unsubscribeActivity(Request $request)
+    {
+        $input = $request->all();
+
+        $user = JWTAuth::authenticate($request->bearerToken());
+        if (is_null($user)) {
+            return $this->sendError('usuario no autorizado.');
+        }
+
+        $validatedData = Validator::make($input, [
+            'activity_id' => 'required',
+        ], [
+            'activity_id.required' => 'La actividad es requerida',
+        ]);        
+
+        if ($validatedData->fails()) {
+            return $this->sendError('Error de validacion.', $validatedData->errors());
+            Log::error($validatedData->errors());
+            return;
+        }
+
+        $activity_id = $input['activity_id'];
+
+        $activity = Activity::find($activity_id);
+
+        $event = $activity->event()->first();
+
+        if (is_null($user->events)) {
+            return $this->sendError('No se encuentra inscripto en el evento');
+        }
+
+        $existEvent = false;
+        foreach ($user->events as $ev) {
+            if ($ev->id == $event->id) {
+                $existEvent = true;
+            }
+
+        }
+
+        if (!$existEvent) {
+            return $this->sendError('No se encuentra inscripto en el evento');
+        }
+
+        if (!is_null($user->activities)) {
+            foreach ($user->activities as $act) {
+                if ($act->id == $activity_id) {
+                    $user->activities()->detach($activity_id);
+                    return $this->sendResponse(null, 'Dejaste de participar de la actividad.');
+                }
+            }
+        }
+        return $this->sendError('No se encuentra inscripto en la actividad.');
+    }
+
+    public function activitiesPerson(Request $request)
+    {
+        $input = $request->all();
+
+        $user = JWTAuth::authenticate($request->bearerToken());
+        if (is_null($user)) {
+            return $this->sendError('usuario no autorizado.');
+        }
+
+        $validatedData = Validator::make($input, [
+            'event_id' => 'required',
+        ], [
+            'event_id.required' => 'El evento es requerido',
+        ]);      
+
+        if ($validatedData->fails()) {
+            return $this->sendError('Error de validacion.', $validatedData->errors());
+            Log::error($validatedData->errors());
+            return;
+        }
+
+        $event_id = $input['event_id'];
+
+        if (is_null($user->events)) {
+            return $this->sendError('La persona no se inscribio al evento');
+        }
+
+        $existEvent = false;
+        foreach ($user->events as $ev) {
+            if ($ev->id == $event_id) {
+                $existEvent = true;
+            }
+
+        }
+
+        if (!$existEvent) {
+            return $this->sendError('La persona no se inscribio al evento');
+        }
+
+        $activities = $user->activities()->get();
+
+        if (!is_null($activities)) {
+            foreach ($activities as $act) {
+                $act->speakers;
+                $act->status;
+                $act->eventFormat;
+                $act->room;
+                $act->start_time = substr($act->start_time, 0, 5);
+                $act->end_time   = substr($act->end_time, 0, 5);
+            }
+        }
+
+        Log::info($activities->where('event_id', '=', $event_id));
+        return $this->sendResponse($activities->where('event_id', '=', $event_id), 'Actividad de la persona');
+    }
+
+    public function eventPerson(Request $request)
+    {
+        $input = $request->all();
+
+        $user = JWTAuth::authenticate($request->bearerToken());
+        if (is_null($user)) {
+            return $this->sendError('usuario no autorizado.');
+        }
+
+        if (is_null($user->events)) {
+            return $this->sendError('La persona no se inscribio a ningun evento');
+        }
+
+        $events = $user->events()->get();
+
+        foreach ($events as $event) {
+            $event->accounts;
+            $event->status;
+            $event->organizers;
+            $event->partners;
+        }
+        return $this->sendResponse($events, 'Eventos recuperados correctamente');
+    }
+
+    public function isParticipatingEvent(Request $request)
+    {
+        $input = $request->all();
+
+        $user = JWTAuth::authenticate($request->bearerToken());
+        if (is_null($user)) {
+            return $this->sendError('usuario no autorizado.');
+        }
+
+        $validatedData = Validator::make($input, [
+            'event_id' => 'required',
+        ], [
+            'event_id.required' => 'El evento es requerido',
         ]);
 
-        if($validatedData->fails()){
-            return $this->sendError('Error de validacion.', $validatedData->errors());   
+        $event_id = $input['event_id'];
+
+        if ($validatedData->fails()) {
+            return $this->sendError('Error de validacion.', $validatedData->errors());
             Log::error($validatedData->errors());
-        } else {
-            $user['password'] = bcrypt($user['password']);
-            //creo el usuario
-            $newUser = User::create($user);
-            if($person['share_data'] == 'true')
-                $person['share_data'] = 1;
-            else
-                $person['share_data'] = 0;
-            $person['user_id'] = $newUser->id;
-            $person['email'] = $newUser->email;
-            Log::info($person);
-            //creo la persona
-            $newPerson = Person::create($person);
-            return $this->sendResponse($newPerson, 'Registro creado correctamente');
+            return;
         }
 
+        if (is_null($user->events)) {
+            return $this->sendError('La persona no se inscribio al evento');
+        }
 
-        
-        /*
-        $email = $input['email'];
-        $password = $input['password'];
-        $name = $input['name'];   
-        $surname = $input['surname']; 
-        $birth_date = $input['birth_date']; 
-        $document_number = $input['document_number']; 
-        $empleo = $input['empleo']; 
-        $study_level_id = $input['study_level_id']; 
-        $intereses = $input['intereses']; 
-        $cellphone = $input['cellphone']; 
-        $country_id = $input['country_id']; 
-        $province_id = $input['province_id']; 
-        $city_id = $input['city_id']; 
-        $street = $input['street']; 
-        $number = $input['number']; 
-        $postal_code = $input['postal_code']; 
-        $floor = $input['floor']; 
-        $dept = $input['dept']; 
-        $terms = $input['terms']; 
-        $share_data = $input['share_data'];
+        $existEvent = false;
+        foreach ($user->events as $ev) {
+            if ($ev->id == $event_id) {
+                return $this->sendResponse(null, 'La persona esta participando del evento');
+            }
 
-
-        $user = new User();
-            $user->name = $name;
-            $user->email = $email;
-            $user->password = bcrypt($password);            
-            $user->enabled = true;
-            $user->save();
-
-            if($user->id == null)
-                return response()->json([
-                "status"=>false, 
-                "message"=>'Faltan datos necesarios para el proceso de actualización.'
-            ], 422);    
-
-        if($input['type'] == 'person'){            
-            $person = new Person();
-            $person->name = $name;
-            $person->surname = $surname;
-            $person->birth_date = $birth_date;
-            $person->document_type_id = 1;
-            //$person->studyLevelId = $study_level_id;
-            $person->document_number = $document_number;
-            $person->cellphone = $cellphone;
-            $person->email = $email;
-            $person->user_id = $user->id;
-            //$person->cityId = $city_id;
-           // $person->provinceId = $province_id;
-           // $person->countryId = $country_id;
-           // $person->postal_code = $postal_code;
-            $person->save();
-            return response()->json([
-                "status"=>true, 
-                "message"=>'Registro creado correctamente'
-            ], 200);
-        }*/
+        }
+        return $this->sendError('La persona no esta participando del evento');
     }
 
+    public function get(Request $request)
+    {
+        $user = JWTAuth::authenticate($request->bearerToken());
+        if (is_null($user)) {
+            return $this->sendError('usuario no autorizado.');
+        }
+        return $this->sendResponse($this->getObject($user), 'Usuario recuperado correctamente');
+    }
 }

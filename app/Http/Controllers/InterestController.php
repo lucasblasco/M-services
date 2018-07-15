@@ -11,7 +11,7 @@ class InterestController extends Controller
 {
     public function index()
     {
-        return $this->sendResponse(Interest::all(), 'Intereses recuperados correctamente');
+        return $this->sendResponse(Interest::orderBy('name', 'asc')->get(), 'Intereses recuperados correctamente');
     }
 
     public function store(Request $request)

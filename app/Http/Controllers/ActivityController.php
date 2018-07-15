@@ -3,17 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Activity;
+use App\Event;
+use App\user;
+use App\SummitUploadFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
+
+use App\Mail\SummitQuery;
+use Illuminate\Support\Facades\Mail;
+use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class ActivityController extends Controller
 {
     public function index()
     {
-        $activities = Activity::all()->orderBy('start_time', 'asc')->get();
+        $activities = Activity::orderBy('start_time', 'asc')->get();
         foreach ($activities as $activity){
             $activity->speakers; 
             $activity->status;
@@ -185,5 +194,121 @@ class ActivityController extends Controller
         $activity->delete();
         Log::info('Delete actividad: '.$activity->id);
         return $this->sendResponse($activity, 'Registro eliminado correctamente');
+    }
+
+    public function summitContact(Request $request)
+    {
+        $input = $request->all();
+
+        $user = JWTAuth::authenticate($request->bearerToken());
+        if (is_null($user)) {
+            return $this->sendError('usuario no autorizado.');
+        }
+
+        $validatedData = Validator::make($input, [
+            'event_id' => 'required',
+            'query' => 'required',
+        ], [
+            'event_id.required' => 'El evento es requerido',
+            'query.required' => 'No se ha proporcionado ninguna consulta',
+        ]);       
+
+        if ($validatedData->fails()) {
+            return $this->sendError('Error de validacion.', $validatedData->errors());
+            Log::error($validatedData->errors());
+            return;
+        }
+        
+        $query = $input['query'];
+        $event_id = $input['event_id'];
+
+        $event = Event::find($event_id);
+
+        $phone = null;
+        if(!is_null($user->person))
+            $phone = $user->person->phone;
+        if(!is_null($user->organization))
+            $phone = $user->organization->phone;
+
+        Mail::to('lcs.blsc@gmail.com')->send(new SummitQuery($event->name, $user->name, $user->email, $phone, $query ));
+
+        return $this->sendResponse(null, 'Consulta enviada correctamente');
+    }
+
+    public function summitUploadTemplete(Request $request){
+        $input = $request->all();
+        Log::info( $request);
+
+        $user = JWTAuth::authenticate($request->bearerToken());
+        if (is_null($user)) {
+            return $this->sendError('usuario no autorizado.');
+        }
+
+        if (!$request->file('template')->isValid()){
+            return $this->sendError('El archivo no es valido');
+        }
+
+        $validatedData = Validator::make($input, [
+            'title' => 'required',
+            'description' => 'required',
+        ], [
+            'title.required' => 'No se ha proporcionado el título del template',
+            'description.required' => 'No se ha proporcionado una descripción para el template',
+        ]);       
+
+        if ($validatedData->fails()) {
+            return $this->sendError('Error de validacion.', $validatedData->errors());
+            Log::error($validatedData->errors());
+            return;
+        }
+       
+        //esta inscripto al summit
+        $activity = $this->userHasActivitySummit($user);
+        if(empty($activity->id)){
+            return $this->sendError('Debe inscribirse en la actividad "M-Summit" para poder subir el templete');
+        }
+
+        $title = $input['title'];
+        $description = $input['description'];
+
+        $file_name = $input['title'];
+
+        //save template
+        $path = $this->saveFile($request);
+        
+        $summit = new SummitUploadFile();
+        $summit->title = $title;
+        $summit->description = $description;
+        $summit->activity_id = $activity->id;
+        $summit->user_id = $user->id;
+        $summit->template_path = $path;      
+
+        //guardo 
+        $summit->save();
+
+        //envio mail
+
+        return $this->sendResponse($summit, 'Su template su enviado correctamente');
+
+    }
+
+    public function saveFile(Request $request) : string {
+        $md5Name = md5_file($request->file('template')->getRealPath());
+        $guessExtension = $request->file('template')->guessExtension();
+        $file = $request->file('template')->storeAs('public/summit', $md5Name.'.'.$guessExtension);
+        return $file;
+    }
+
+    function userHasActivitySummit(User $user) : Activity {
+        if(empty($user->activities->first()))
+            return new Activity();
+     
+        foreach ($user->activities as $act) {     
+                if ($act->event_format_id == 3) {
+                    return $act;
+                }
+            }
+     
+        return new Activity();
     }
 }
