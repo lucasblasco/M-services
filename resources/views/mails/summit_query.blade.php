@@ -23,8 +23,7 @@ body {
     width: 100% !important;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
-    min-width: 1000px;
-
+      min-width: 1000px;
 }
 
 .ExternalClass {
@@ -97,12 +96,15 @@ h2 {
     line-height: 22px;
     font-weight: normal;
 }
+
 p {
     color: #555;
     font-family: Helvetica, Arial, sans-serif;
     font-size: 16px;
     line-height: 160%;
 }
+
+
 .boton{
   width: 100px;
   height: 50px;
@@ -154,7 +156,7 @@ p {
     margin-left:-200px;
 
 }
-.fin{
+.fin2{
 	clear:left;
 	position:relative;
 	float:left;
@@ -163,7 +165,7 @@ p {
   margin-left:-250px;
 
 }
-.fin2{
+.fin{
 	clear:left;
 	position:relative;
 	float:left;
@@ -180,43 +182,53 @@ p {
   text-align: center;
 }
 
+
             </style>
-        </link>
     </head>
     <body>
 
       <div class="main_principal">
 
+        <div class="fin2" >
+
+              <div class="imagen">
+                <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/summit.png"/>
+              </div>
+
+        </div>
+
           <div class="main" >
 
-            <div id="caja_left" >
 
-                    <div class="imagen" style="border-bottom:solid #101d5d 3px;">
-
-                      <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/registro_mwork_ok2.png"/>
-
-                    </div>
-
-            </div>
                 <div id="caja_left" style="margin-top:15px;">
 
-                          <h2>
-                              ¡Te damos la bienvenida a MWork!
-                          </h2>
+                  <h2>
+                      Consulta sobre M-Summit
+                  </h2>
 
                 </div>
                 <div id="caja_left">
-                          <p>
-                              Hola {{ $name }}:
-                          </p>
-                          <p>
-                              Tu registro está casi listo, para confirmar tu correo y finalizar tu login solo debes hacer click en el botón siguiente:
-                          </p>
+                  <p>
+                      Evento: {{ $event }}
+                      <br/>
+                      Datos de la persona
+                  </p>
+                  <p>
+                      Nombre: {{ $name }}
+                      <br/>
+                      Teléfono: {{ $phone }}
+                      <br/>
+                      Email: {{ $mail }}
+                      <br/>
+                  </p>
+                  <p>
+                      Consulta: {{ $query }}
+                  </p>
 
                 </div>
                 <div id="caja_left" >
 
-                          <button type="button" class="boton"  href="http://localhost:4200/verificar-correo/{{ $code }}" target="_blank">
+                          <button type="button" class="boton"  href="http://localhost:4200/verificar-correo/" target="_blank">
                             <span style="font-size:16px">Confirmar</span>
                           </button>
 
@@ -235,11 +247,12 @@ p {
           <div class="fin" >
 
                 <div class="imagen">
-                    <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/registro_mwork_pie.png"/>
+                    <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/organizan.png"/>
                 </div>
 
           </div>
       </div>
+
 
     </body>
 </html>
