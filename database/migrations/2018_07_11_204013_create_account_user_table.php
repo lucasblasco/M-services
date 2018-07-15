@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AccountOrganization extends Migration
+class CreateAccountUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class AccountOrganization extends Migration
      */
     public function up()
     {
-        Schema::create('account_organization', function (Blueprint $table) {
+        Schema::create('account_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('organization_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->integer('account_id')->unsigned();
+            $table->string('name');
             $table->timestamps();
-            $table->foreign('organization_id')->references('id')->on('organizations');
-            $table->foreign('account_id')->references('id')->on('accounts');   
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('account_id')->references('id')->on('accounts');        
         });
     }
 
@@ -30,6 +31,6 @@ class AccountOrganization extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('account_organization');
+        Schema::dropIfExists('account_user');
     }
 }
