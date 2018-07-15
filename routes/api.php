@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,7 @@ Route::group(['middleware' => 'cors'], function(){
 	//LOGIN
 	Route::post('login', 'ApiController@login');
 	Route::post('register', 'ApiController@register');
-	Route::get('register/verify/{code}', 'ApiController@verify');
+	Route::get('register/verify', 'ApiController@verify');
 
 	//Intereses
 	Route::get('interests', 'InterestController@index');
@@ -51,26 +52,37 @@ Route::group(['middleware' => 'cors'], function(){
 	//Mail partner
 	Route::get('partnerContact', 'PartnerContactController@send');
 
+	Route::get('summit/{file}', function ($file) {
+		return response()->download(storage_path("app/public/summit/{$file}"));
+			//    return Storage::download("summit/".$file);
+			});
+
 	Route::group(['middleware' => 'auth.jwt'], function(){		
 		//Login
 		Route::get('logout', 'ApiController@logout');
+		Route::post('registerUpdate', 'ApiController@registerUpdate');
 		
 		//Evento
-		Route::post('subscribeEvent', 'PersonController@subscribeEvent');
-		Route::post('unsubscribeEvent', 'PersonController@unsubscribeEvent');
-		Route::get('isParticipatingEvent', 'PersonController@isParticipatingEvent');
-		Route::get('eventPerson', 'PersonController@eventPerson');
+		Route::post('subscribeEvent', 'UserController@subscribeEvent');
+		Route::post('unsubscribeEvent', 'UserController@unsubscribeEvent');
+		Route::get('isParticipatingEvent', 'UserController@isParticipatingEvent');
+		
+		Route::get('eventPerson', 'UserController@eventPerson');
 
 		//Actividades
-		Route::post('subscribeActivity', 'PersonController@subscribeActivity');
-		Route::post('unsubscribeActivity', 'PersonController@unsubscribeActivity');
+		Route::post('subscribeActivity', 'UserController@subscribeActivity');
+		Route::post('unsubscribeActivity', 'UserController@unsubscribeActivity');
 
-		Route::get('activitiesPerson', 'PersonController@activitiesPerson');
+		Route::get('activitiesPerson', 'UserController@activitiesPerson');
 
 		//Persona
 		//Route::get('persons', 'PersonController@index')
-		Route::get('persons/get', 'PersonController@get');
+		Route::get('persons/get', 'UserController@get');
+		
+		//Mail summit query
+		Route::get('summitContact', 'ActivityController@summitContact');
 
+		Route::post('summitUploadTemplete', 'ActivityController@summitUploadTemplete');
 		/*Route::apiResource('users', 'UserController');
 		Route::apiResource('interests', 'InterestController');
 		Route::apiResource('documentTypes', 'documentTypeController');
