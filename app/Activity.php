@@ -38,8 +38,8 @@ class Activity extends Model
         return $this->belongsToMany('App\Speaker', 'activity_speaker')->withTimestamps();
     }
 
-    public function persons()
+    public function users()
     {
-        return $this->belongsToMany('App\Person', 'activity_person')->withTimestamps();
+        return $this->belongsToMany('App\User', 'activity_user')->withTimestamps();
     }
 }

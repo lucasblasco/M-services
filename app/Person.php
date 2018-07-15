@@ -31,50 +31,12 @@ class Person extends Model
 
     public function profession()
     {
-        //return $this->belongsToMany('App\Profession', 'person_profession')->withTimestamps();
         return $this->belongsTo('App\Profession');
-    }
-
-    public function interests()
-    {
-        return $this->belongsToMany('App\Interest', 'interest_person')->withTimestamps();
-    }
-
-    public function accounts()
-    {
-        return $this->belongsToMany('App\Account', 'account_person')
-            ->withPivot('name')
-            ->withTimestamps();
-    }
-
-    public function jobs()
-    {
-        return $this->belongsToMany('App\Job', 'job_person')->withTimestamps();
-    }
+    }   
 
      public function country()
     {
         return $this->belongsTo('App\Country');
-    }
-
-    public function province()
-    {
-        return $this->belongsTo('App\Province');
-    }
-    
-    public function city()
-    {
-        return $this->belongsTo('App\City');
-    }
-
-    public function events()
-    {
-        return $this->belongsToMany('App\Event', 'event_person')->withTimestamps();
-    }
-
-    public function activities()
-    {
-        return $this->belongsToMany('App\Activity', 'activity_person')->withTimestamps();
-    } 
+    }   
 }
 

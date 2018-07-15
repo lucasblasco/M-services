@@ -72,7 +72,7 @@ class Event extends Model
        return $this->HasMany('App\EventPartner');
     }
 
-    public function persons(){
-        return $this->belongsToMany('App\Person', 'event_person')->withTimestamps();
+    public function users_asistants(){
+        return $this->belongsToMany('App\User', 'event_user')->withTimestamps();
     }
 }

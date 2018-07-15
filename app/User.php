@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
@@ -20,7 +20,7 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'confirmation_code'
     ];
 
     /**
@@ -32,7 +32,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
     }
- 
+
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
      *
@@ -43,15 +43,50 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function person(){
-       return $this->hasOne('App\Person');
+    public function person()
+    {
+        return $this->hasOne('App\Person');
     }
 
-    public function event(){
-       return $this->HasMany('App\Event');
+    public function event()
+    {
+        return $this->HasMany('App\Event');
     }
 
-    public function organization(){
-       return $this->HasMany('App\Organization');
+    public function organization()
+    {
+        return $this->hasOne('App\Organization');
+    }
+
+    public function interests()
+    {
+        return $this->belongsToMany('App\Interest', 'interest_user')->withTimestamps();
+    }
+
+    public function accounts()
+    {
+        return $this->belongsToMany('App\Account', 'account_user')
+            ->withPivot('name')
+            ->withTimestamps();
+    }
+
+    public function jobs()
+    {
+        return $this->belongsToMany('App\Job', 'job_user')->withTimestamps();
+    }
+
+    public function events()
+    {
+        return $this->belongsToMany('App\Event', 'event_user')->withTimestamps();
+    }
+
+    public function activities()
+    {
+        return $this->belongsToMany('App\Activity', 'activity_user')->withTimestamps();
+    }
+
+    public function hasActivities()
+    {
+        return (bool) $this->has('activities')->get();
     }
 }

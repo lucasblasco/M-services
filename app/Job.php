@@ -13,8 +13,8 @@ class Job extends Model
 	// Aquí ponemos los campos que no queremos que se devuelvan en las consultas.
 	protected $hidden = ['created_at','updated_at'];
 
-	public function persons()
+	public function users()
     {
-        return $this->belongsToMany('App\Person', 'job_person');
+        return $this->belongsToMany('App\User', 'job_user');
     }
 }
