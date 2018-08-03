@@ -8,7 +8,7 @@ class CreateSummitUploadFilesTable extends Migration
 {
     public function up()
     {
-        Schema::create('summit_upload_files', function (Blueprint $table) {
+       /* Schema::create('summit_upload_files', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
             $table->string('description');
@@ -18,11 +18,11 @@ class CreateSummitUploadFilesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('activity_id')->references('id')->on('activities'); 
             $table->timestamps();
-        });
+        });*/
     }
 
     public function down()
     {
-        Schema::dropIfExists('summit_upload_files');
+       // Schema::dropIfExists('summit_upload_files');
     }
 }
