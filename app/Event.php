@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Event extends Model
 {
@@ -65,14 +66,14 @@ class Event extends Model
     }
 
     public function organizers(){
-       return $this->HasMany('App\EventOrganizer');
+       return $this->HasMany('App\EventOrganizer')->orderBy('sorting', 'asc');
     }
 
     public function partners(){
-       return $this->HasMany('App\EventPartner');
+       return $this->HasMany('App\EventPartner')->orderBy('sorting', 'asc');
     }
 
     public function users_asistants(){
         return $this->belongsToMany('App\User', 'event_user')->withTimestamps();
-    }
+    }    
 }

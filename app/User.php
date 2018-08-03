@@ -82,8 +82,8 @@ class User extends Authenticatable implements JWTSubject
 
     public function activities()
     {
-        return $this->belongsToMany('App\Activity', 'activity_user')->withTimestamps();
-    }
+        return $this->belongsToMany('App\Activity', 'activity_user')->withTimestamps()->withPivot('id');
+    }    
 
     public function hasActivities()
     {
