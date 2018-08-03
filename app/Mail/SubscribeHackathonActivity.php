@@ -11,17 +11,17 @@ class SubscribeHackathonActivity extends Mailable
 {
     use Queueable, SerializesModels;
 
-   public $name;
-    public $code;
+    public $name;
+    public $event;
 
-    public function __construct($name, $code)
+    public function __construct($name, $event)
     {
         $this->name = $name;
-        $this->code = $code;
+        $this->event = $event;
     }
 
     public function build()
     {
-        return $this->view('mails.subscribe_hackathon_activity');
+        return $this->view('mails.subscribe_hackathon_activity')->subject('Inscripción a M_Congress');;
     }
 }

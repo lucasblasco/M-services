@@ -192,7 +192,7 @@ p {
         <div class="fin2" >
 
               <div class="imagen">
-                <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/summit.png"/>
+                <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/workshop.png"/>
               </div>
 
         </div>
@@ -200,38 +200,33 @@ p {
           <div class="main" >
 
 
-                <div style="margin-top:15px;">
+                <div  style="margin-top:15px;">
 
                   <h3>
-                      Consulta sobre M-Summit
+                      ¡Ya te encuentras inscripto al espacio M_WORKSHOP!
                   </h3>
 
                 </div>
                 <div id="caja_left">
                   <p>
-                      Evento: {{ $event }}
-                      <br/>
-                      Datos de la persona
+                      Hola, {{ $name }}:
                   </p>
                   <p>
-                      Nombre: {{ $name }}
-                      <br/>
-                      Teléfono: {{ $phone }}
-                      <br/>
-                      Email: {{ $mail }}
-                      <br/>
-                  </p>
-                  <p>
-                      Consulta: {{ $query }}
+
+                    Compartiremos una mesa de trabajo sobre {{$actividad_name}} donde aportaremos ideas basadas en nuevas tecnologías que mejoren el problema que se plantee. Expertos, moderarán un encuentro que promete interesantes propuestas.
+                    <br>Consulta la <a style="color:#3a7999;" href="http://mwork.com.ar/eventos" target="_blank">agenda</a> y reserva tu lugar en las actividades que desees.
+                    <br>¡Luego a sumergirte en un verdadero ecosistema emprendedor!
+
+
+
                   </p>
 
                 </div>
+
                 <div id="caja_left" >
-
-                          <p>
-                              Puedes revisar y modificar tus datos de perfil cuando lo desees.
-                          </p>
-
+                          <h3>
+                              {{ $event }} <!---FALTARIA DIA / LUGAR / CALLE N° / CIUDAD / PAIS---->
+                          </h3>
                 </div>
 
           </div>

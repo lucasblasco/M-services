@@ -92,7 +92,7 @@ a {
 h2 {
     color: #181818;
     font-family: Helvetica, Arial, sans-serif;
-    font-size: 22px;
+    font-size: 24px;
     line-height: 22px;
     font-weight: normal;
 }
@@ -103,7 +103,13 @@ p {
     font-size: 16px;
     line-height: 160%;
 }
-
+li {
+    color: #555;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 160%;
+    text-align: justify;
+}
 
 .boton{
   width: 100px;
@@ -132,37 +138,20 @@ p {
   text-align: center;
 
 	/*position:relative;*/
-  width:800px;
-  left: 50%;
-  margin-left:-400px;
-}
-.main_principal{
-  width: 100%;
-	clear:left;
-	position:relative;
-	float:left;
-  min-width: 1000px;
-
+  width:600px;
 }
 
 .imagen img
 {
     max-width: 100%;
 }
-.center {
-
-    left: 50%;
-    width: 400px;
-    margin-left:-200px;
-
-}
 .fin2{
 	clear:left;
 	position:relative;
 	float:left;
-  width:600px;
+  width:400px;
   left: 50%;
-  margin-left:-300px;
+  margin-left:-200px;
 
 }
 .fin{
@@ -170,8 +159,6 @@ p {
 	position:relative;
 	float:left;
   width:600px;
-  left: 50%;
-  margin-left:-300px;
 
 }
 #caja_left{
@@ -179,7 +166,7 @@ p {
 	position:relative;
 	float:left;
   width:100%;
-  text-align: center;
+  text-align: justify;
 }
 
 
@@ -187,51 +174,62 @@ p {
     </head>
     <body>
 
-      <div class="main_principal">
 
-        <div class="fin2" >
 
-              <div class="imagen">
-                <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/summit.png"/>
-              </div>
-
-        </div>
 
           <div class="main" >
+            <div class="fin2" >
 
+                  <div class="imagen">
+                    <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/logo_movilidad.jpg"/>
+                  </div>
 
-                <div style="margin-top:15px;">
+            </div>
+              <div id="caja_left">
+                <p>
+                    Hola {{ $name }}!,
+
+                </p>
+
+              </div>
+                <div  >
 
                   <h3>
-                      Consulta sobre M-Summit
+                    ¡Gracias por participar de {{ $event }}!
+
                   </h3>
 
                 </div>
                 <div id="caja_left">
-                  <p>
-                      Evento: {{ $event }}
-                      <br/>
-                      Datos de la persona
+                  <p >
+                    Confirmamos tu inscripción, ten en cuenta que:
+                  <ul style="text-align:justify">
+                    <li>No es necesario imprimir éste mail como comprobante de entrada.</li>
+                    <li>En la agenda encontrarás las actualizaciones del evento que se incorporen.</li>
+                    <li>Puedes inscribirte en las actividades que desees.</li>
+                    <li>Accediendo a tu perfil tendrás opción a revisar y modificar tus datos.</li>
+                    <li>Cualquier duda tienes a disposición contacto@mwork.com.ar para comunicarte.</li>
+                  </ul>
                   </p>
-                  <p>
-                      Nombre: {{ $name }}
-                      <br/>
-                      Teléfono: {{ $phone }}
-                      <br/>
-                      Email: {{ $mail }}
-                      <br/>
-                  </p>
-                  <p>
-                      Consulta: {{ $query }}
-                  </p>
+
 
                 </div>
+
                 <div id="caja_left" >
+                      <p>
+                        Puedes seguir las novedades en nuestras redes sociales
+                      </p>
+                </div>
 
-                          <p>
-                              Puedes revisar y modificar tus datos de perfil cuando lo desees.
-                          </p>
-
+                <div id="caja_left" >
+                       <!--   <h2>
+                              {2{ $event }} -FALTARIA DIA / LUGAR / CALLE N° / CIUDAD / PAIS
+                          </h2>---->
+                </div>
+                <div id="caja_left" >
+                  <h2>
+                      Te esperamos!
+                  </h2>
                 </div>
 
           </div>
@@ -244,7 +242,6 @@ p {
                 </div>
 
           </div>
-      </div>
 
 
     </body>

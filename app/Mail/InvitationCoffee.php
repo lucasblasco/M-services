@@ -7,21 +7,23 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SubscribeSummitActivity extends Mailable
+class InvitationCoffee extends Mailable
 {
     use Queueable, SerializesModels;
 
-     public $name;
+    public $user;
+    public $guest;
     public $event;
 
-    public function __construct($name, $event)
+    public function __construct($user, $guest, $event)
     {
-        $this->name = $name;
+        $this->user = $user;
+        $this->guest = $guest;
         $this->event = $event;
     }
 
     public function build()
     {
-        return $this->view('mails.summit_inscription')->subject('Inscripción a M_Summit');;
+        return $this->view('mails.invitation_coffee')->subject('Invitación de Coffee');
     }
 }

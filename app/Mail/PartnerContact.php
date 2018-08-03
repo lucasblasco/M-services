@@ -15,17 +15,19 @@ class PartnerContact extends Mailable
     public $phone;
     public $email;
     public $user;
+    public $event;
 
-    public function __construct($user, $name, $phone, $email)
+    public function __construct($user, $name, $phone, $email, $event)
     {
         $this->name = $name;
         $this->phone = $phone;
         $this->email = $email;
         $this->user = $user;
+        $this->event = $event;
     }
     
     public function build()
     {
-        return $this->view('mails.partner_contact');
+        return $this->view('mails.partner_contact')->subject('Contacto de Partner');
     }
 }

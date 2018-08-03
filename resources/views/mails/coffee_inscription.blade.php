@@ -92,7 +92,7 @@ a {
 h2 {
     color: #181818;
     font-family: Helvetica, Arial, sans-serif;
-    font-size: 22px;
+    font-size: 26px;
     line-height: 22px;
     font-weight: normal;
 }
@@ -132,18 +132,18 @@ p {
   text-align: center;
 
 	/*position:relative;*/
-  width:800px;
-  left: 50%;
-  margin-left:-400px;
+  width:600px;
+  /*left: 50%;
+  margin-left:-600px;*/
 }
-.main_principal{
+/*.main_principal{
   width: 100%;
 	clear:left;
 	position:relative;
 	float:left;
   min-width: 1000px;
 
-}
+}*/
 
 .imagen img
 {
@@ -161,8 +161,8 @@ p {
 	position:relative;
 	float:left;
   width:600px;
-  left: 50%;
-  margin-left:-300px;
+  /*left: 50%;
+  margin-left:-300px;*/
 
 }
 .fin{
@@ -170,8 +170,8 @@ p {
 	position:relative;
 	float:left;
   width:600px;
-  left: 50%;
-  margin-left:-300px;
+  /*left: 50%;
+  margin-left:-300px;*/
 
 }
 #caja_left{
@@ -179,7 +179,7 @@ p {
 	position:relative;
 	float:left;
   width:100%;
-  text-align: center;
+  text-align: justify;
 }
 
 
@@ -187,12 +187,10 @@ p {
     </head>
     <body>
 
-      <div class="main_principal">
-
         <div class="fin2" >
 
               <div class="imagen">
-                <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/summit.png"/>
+                <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/coffee.png"/>
               </div>
 
         </div>
@@ -203,35 +201,29 @@ p {
                 <div style="margin-top:15px;">
 
                   <h3>
-                      Consulta sobre M-Summit
+                      ¡Ya te encuentras inscripto al espacio M_COFFEE!
                   </h3>
 
                 </div>
                 <div id="caja_left">
                   <p>
-                      Evento: {{ $event }}
-                      <br/>
-                      Datos de la persona
+                      Hola, {{ $name }}:
                   </p>
                   <p>
-                      Nombre: {{ $name }}
-                      <br/>
-                      Teléfono: {{ $phone }}
-                      <br/>
-                      Email: {{ $mail }}
-                      <br/>
-                  </p>
-                  <p>
-                      Consulta: {{ $query }}
+                    Para no perder la oportunidad de tomar un café con ese contacto clave que estás necesitando, pensamos en brindarte un momento “de igual a igual” y así conversar de negocios, proyectos e ideas.
+                    <br><br>Consulta los participantes inscriptos disponibles en el apartado M_COFFEE de tu perfil e invita a quien desees, una vez que acepte tu solicitud te enviaremos un mail de confirmación.
+                    <br><br>Recuerda que, en caso que a las 48 horas de enviada la invitación no recibas respuesta, estarás habilitado para invitar a otro participante quedando anulada la propuesta inicial.
+                    <br><br>¡Luego a sumergirte en un verdadero ecosistema emprendedor!
+
+
                   </p>
 
                 </div>
+
                 <div id="caja_left" >
-
-                          <p>
-                              Puedes revisar y modificar tus datos de perfil cuando lo desees.
-                          </p>
-
+                          <h3>
+                              {{ $event }} <!---FALTARIA DIA / LUGAR / CALLE N° / CIUDAD / PAIS---->
+                          </h3>
                 </div>
 
           </div>
@@ -244,8 +236,6 @@ p {
                 </div>
 
           </div>
-      </div>
-
 
     </body>
 </html>

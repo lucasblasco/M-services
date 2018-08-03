@@ -27,6 +27,6 @@ class SummitQuery extends Mailable
 
     public function build()
     {
-        return $this->view('mails.summit_query');
+        return $this->view('mails.summit_query')->subject('Consulta por M_Summit');;
     }
 }

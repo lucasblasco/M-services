@@ -12,16 +12,16 @@ class SubscribeEvent extends Mailable
     use Queueable, SerializesModels;
 
     public $name;
-    public $code;
+    public $event;
 
-    public function __construct($name, $code)
+    public function __construct($name, $event)
     {
         $this->name = $name;
-        $this->code = $code;
+        $this->event = $event;
     }
 
     public function build()
     {
-        return $this->view('mails.subscribe_event');
+        return $this->view('mails.event_inscription')->subject('Inscripción a Evento');;
     }
 }

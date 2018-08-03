@@ -22,6 +22,6 @@ class EmailVerify extends Mailable
     
     public function build()
     {
-        return $this->view('mails.email_verify');
+        return $this->view('mails.email_verify')->subject('Activación de usuario');
     }
 }

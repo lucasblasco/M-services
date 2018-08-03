@@ -203,35 +203,27 @@ p {
                 <div style="margin-top:15px;">
 
                   <h3>
-                      Consulta sobre M-Summit
+                      ¡Ya te encuentras inscripto al espacio M_SUMMIT!
                   </h3>
 
                 </div>
                 <div id="caja_left">
                   <p>
-                      Evento: {{ $event }}
-                      <br/>
-                      Datos de la persona
+                      Hola, {{ $name }}:
                   </p>
                   <p>
-                      Nombre: {{ $name }}
-                      <br/>
-                      Teléfono: {{ $phone }}
-                      <br/>
-                      Email: {{ $mail }}
-                      <br/>
-                  </p>
-                  <p>
-                      Consulta: {{ $query }}
+                    Hacer visible tu propuesta es el primer paso para potenciarla, te prestamos nuestro micrófono para que la presentes… también tendrás la oportunidad de conocer qué están desarrollando posibles Socios Clave.
+                    <br>Consulta la <a style="color:#3a7999;" href="http://mwork.com.ar/eventos" target="_blank">agenda</a> y reserva tu lugar en las actividades que desees.
+                    <br>¡Luego a sumergirte en un verdadero ecosistema emprendedor!
+
                   </p>
 
                 </div>
+
                 <div id="caja_left" >
-
-                          <p>
-                              Puedes revisar y modificar tus datos de perfil cuando lo desees.
-                          </p>
-
+                          <h3>
+                              {{ $event }} <!---FALTARIA DIA / LUGAR / CALLE N° / CIUDAD / PAIS---->
+                          </h3>
                 </div>
 
           </div>

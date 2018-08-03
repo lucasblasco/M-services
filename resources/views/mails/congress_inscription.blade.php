@@ -192,7 +192,7 @@ p {
         <div class="fin2" >
 
               <div class="imagen">
-                <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/summit.png"/>
+                <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/congress.png"/>
               </div>
 
         </div>
@@ -203,35 +203,28 @@ p {
                 <div style="margin-top:15px;">
 
                   <h3>
-                      Consulta sobre M-Summit
+                      ¡Ya te encuentras inscripto al espacio M_CONGRESS!
                   </h3>
 
                 </div>
                 <div id="caja_left">
                   <p>
-                      Evento: {{ $event }}
-                      <br/>
-                      Datos de la persona
+                      Hola, {{ $name }}:
                   </p>
                   <p>
-                      Nombre: {{ $name }}
-                      <br/>
-                      Teléfono: {{ $phone }}
-                      <br/>
-                      Email: {{ $mail }}
-                      <br/>
-                  </p>
-                  <p>
-                      Consulta: {{ $query }}
+                    Influenciadores en movilidad dicen presente para brindarte conferencias 360° donde además de presentarte nuevas tendencias, responderán a la participación del público.
+                    <br>Tienes tu lugar para ser un protagonista más del evento, queremos brindarte la mejor experiencia networking.
+                    <br>Consulta la <a style="color:#3a7999;" href="http://mwork.com.ar/eventos" target="_blank">agenda</a> y reserva tu lugar en las actividades que desees.
+                    <br>¡Luego a sumergirte en un verdadero ecosistema emprendedor!
+
                   </p>
 
                 </div>
+
                 <div id="caja_left" >
-
-                          <p>
-                              Puedes revisar y modificar tus datos de perfil cuando lo desees.
-                          </p>
-
+                          <h3>
+                              {{ $event }} <!---FALTARIA DIA / LUGAR / CALLE N° / CIUDAD / PAIS---->
+                          </h3>
                 </div>
 
           </div>

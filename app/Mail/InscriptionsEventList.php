@@ -2,26 +2,28 @@
 
 namespace App\Mail;
 
+namespace App\Mail;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SubscribeSummitActivity extends Mailable
+class InscriptionsEventList extends Mailable
 {
     use Queueable, SerializesModels;
 
-     public $name;
+    public $users;
     public $event;
 
-    public function __construct($name, $event)
+    public function __construct($event, $users)
     {
-        $this->name = $name;
+        $this->users = $users;
         $this->event = $event;
     }
 
     public function build()
     {
-        return $this->view('mails.summit_inscription')->subject('Inscripción a M_Summit');;
+        return $this->view('mails.inscriptions_event_list')->subject('Inscriptos al evento');
     }
 }

@@ -92,7 +92,7 @@ a {
 h2 {
     color: #181818;
     font-family: Helvetica, Arial, sans-serif;
-    font-size: 22px;
+    font-size: 26px;
     line-height: 22px;
     font-weight: normal;
 }
@@ -106,44 +106,44 @@ p {
 
 
 .boton{
-  width: 100px;
+  width: 200px;
   height: 50px;
   border: none;
   background: #3a7999;
   box-sizing: border-box;
   transition: all 500ms ease;
-	color:white;
+  color:white;
   font-weight: bold;
   font-size: 14px;
 
 }
 
 .boton:hover{
-	cursor:pointer;
+  cursor:pointer;
   background: rgba(0,0,0,0);
   color: #3a7999;
   box-shadow: inset 0 0 0 3px #3a7999;
 }
 .main{
   clear:left;
-	position:relative;
-	float:left;
+  position:relative;
+  float:left;
   /*width:100%;*/
   text-align: center;
 
-	/*position:relative;*/
-  width:800px;
-  left: 50%;
-  margin-left:-400px;
+  /*position:relative;*/
+  width:600px;
+  /*left: 50%;
+  margin-left:-600px;*/
 }
-.main_principal{
+/*.main_principal{
   width: 100%;
-	clear:left;
-	position:relative;
-	float:left;
+  clear:left;
+  position:relative;
+  float:left;
   min-width: 1000px;
 
-}
+}*/
 
 .imagen img
 {
@@ -157,95 +157,80 @@ p {
 
 }
 .fin2{
-	clear:left;
-	position:relative;
-	float:left;
+  clear:left;
+  position:relative;
+  float:left;
   width:600px;
-  left: 50%;
-  margin-left:-300px;
+  /*left: 50%;
+  margin-left:-300px;*/
 
 }
 .fin{
-	clear:left;
-	position:relative;
-	float:left;
+  clear:left;
+  position:relative;
+  float:left;
   width:600px;
-  left: 50%;
-  margin-left:-300px;
+  /*left: 50%;
+  margin-left:-300px;*/
 
 }
 #caja_left{
-	clear:left;
-	position:relative;
-	float:left;
+  clear:left;
+  position:relative;
+  float:left;
   width:100%;
-  text-align: center;
+  text-align: justify;
 }
-
-
             </style>
+        </link>
     </head>
     <body>
-
-      <div class="main_principal">
-
-        <div class="fin2" >
-
-              <div class="imagen">
-                <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/summit.png"/>
-              </div>
-
+        <div class="fin2">
+            <div class="imagen">
+                <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/coffee.png"/>
+            </div>
         </div>
-
-          <div class="main" >
-
-
-                <div style="margin-top:15px;">
-
-                  <h3>
-                      Consulta sobre M-Summit
-                  </h3>
-
-                </div>
-                <div id="caja_left">
-                  <p>
-                      Evento: {{ $event }}
-                      <br/>
-                      Datos de la persona
-                  </p>
-                  <p>
-                      Nombre: {{ $name }}
-                      <br/>
-                      Teléfono: {{ $phone }}
-                      <br/>
-                      Email: {{ $mail }}
-                      <br/>
-                  </p>
-                  <p>
-                      Consulta: {{ $query }}
-                  </p>
-
-                </div>
-                <div id="caja_left" >
-
-                          <p>
-                              Puedes revisar y modificar tus datos de perfil cuando lo desees.
-                          </p>
-
-                </div>
-
-          </div>
-
-
-          <div class="fin" >
-
-                <div class="imagen">
-                    <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/organizan.png"/>
-                </div>
-
-          </div>
-      </div>
-
-
+        <div class="main">
+            <div style="margin-top:15px;">
+                <h3>
+                    ¡Alguien quiere contactarse contigo en el M_COFFEE!
+                </h3>
+            </div>
+            <div id="caja_left">
+                <p>
+                    Hola, {{ $guest->name }}:
+                </p>
+                <p>
+                    {{ $user->person->name . ' ' . $user->person->surname }} te ha enviado una solicitud para tomar un café contigo!
+                    <br>
+                    </br>
+                </p>
+            </div>
+            <div>
+                <a href="http://www.mwork.com.ar/login" target="_blank">
+                    <button class="boton">
+                        Ir a mwork!
+                    </button>
+                </a>
+            </div>
+            <div id="caja_left">
+                <p>
+                    <br>
+                        Recuerda que, en caso de no aceptar esta invitación dentro de las 48 horas de enviada caducará automáticamente.
+                    </br>
+                </p>
+            </div>
+            <div id="caja_left">
+                <h3>
+                    {{ $event }}
+                    <!---FALTARIA DIA / LUGAR / CALLE N° / CIUDAD / PAIS---->
+                </h3>
+            </div>
+        </div>
+        <div class="fin">
+            <div class="imagen">
+                <img alt="Logo" data-default="placeholder" src="http://services.mwork.com.ar/storage/app/public/images/organizan.png"/>
+            </div>
+        </div>
     </body>
 </html>
