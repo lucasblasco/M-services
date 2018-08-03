@@ -19,10 +19,12 @@ use Illuminate\Support\Facades\Storage;
 });*/
 
 Route::group(['middleware' => 'cors'], function(){
+	Route::get('prueba', 'UserController@prueba');
 	//Auth::routes();	
 	//LOGIN
 	Route::post('login', 'ApiController@login');
 	Route::post('register', 'ApiController@register');
+	Route::post('refreshToken', 'ApiController@refreshToken');
 	Route::get('register/verify', 'ApiController@verify');
 
 	//Intereses
@@ -78,11 +80,20 @@ Route::group(['middleware' => 'cors'], function(){
 		//Persona
 		//Route::get('persons', 'PersonController@index')
 		Route::get('persons/get', 'UserController@get');
+		Route::post('changeAvatar', 'UserController@changeAvatar');
 		
 		//Mail summit query
 		Route::get('summitContact', 'ActivityController@summitContact');
 
 		Route::post('summitUploadTemplete', 'ActivityController@summitUploadTemplete');
+
+
+		//Coffee
+		Route::get('coffeeParticipants', 'CoffeeInvitationController@coffeeParticipants');
+		Route::get('myCoffeeList', 'CoffeeInvitationController@myCoffeeList');
+		Route::post('sendInvitation', 'CoffeeInvitationController@sendInvitation');
+		Route::post('acceptInvitation', 'CoffeeInvitationController@acceptInvitation');
+		
 		/*Route::apiResource('users', 'UserController');
 		Route::apiResource('interests', 'InterestController');
 		Route::apiResource('documentTypes', 'documentTypeController');
