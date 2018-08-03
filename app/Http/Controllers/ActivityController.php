@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Activity;
 use App\Event;
-use App\user;
+use App\User;
 use App\SummitUploadFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use Carbon\Carbon;
 
 use App\Mail\SummitQuery;
 use Illuminate\Support\Facades\Mail;
@@ -37,7 +38,6 @@ class ActivityController extends Controller
     public function indexByEvent(Request $request)
     {
         $event = $request->input('event_id');   
-        Log::info($event);     
         $activities = Activity::where('event_id','=',$event)->orderBy('start_time', 'asc')->get();
         foreach ($activities as $activity){
             $activity->speakers; 
@@ -69,7 +69,6 @@ class ActivityController extends Controller
         }           
 
         $newObj = Activity::create($input);
-        Log::info('Create actividad: '.$newObj->toArray);
         return $this->sendResponse($newObj, 'Registro creado correctamente');
     }
 
@@ -141,7 +140,6 @@ class ActivityController extends Controller
 
             if ($band){
                 $activity->save();
-                Log::info('Update actividad: '.$activity->id);
                 return response()->json([
                     "status"=>true, 
                     "message"=>$activity
@@ -230,7 +228,7 @@ class ActivityController extends Controller
         if(!is_null($user->organization))
             $phone = $user->organization->phone;
 
-        Mail::to('lcs.blsc@gmail.com')->send(new SummitQuery($event->name, $user->name, $user->email, $phone, $query ));
+        Mail::to('contacto@mwork.com.ar')->send(new SummitQuery($event->name, $user->name, $user->email, $phone, $query ));
 
         return $this->sendResponse(null, 'Consulta enviada correctamente');
     }
@@ -295,7 +293,10 @@ class ActivityController extends Controller
     public function saveFile(Request $request) : string {
         $md5Name = md5_file($request->file('template')->getRealPath());
         $guessExtension = $request->file('template')->guessExtension();
-        $file = $request->file('template')->storeAs('public/summit', $md5Name.'.'.$guessExtension);
+        $time = str_replace(' ', '_', Carbon::now());
+        $time = str_replace(':', '_', $time);
+        $time = str_replace('-', '_', $time);
+        $file = $request->file('template')->storeAs('public/summit', $time.'.'.$md5Name.'.'.$guessExtension);
         return $file;
     }
 
@@ -310,5 +311,5 @@ class ActivityController extends Controller
             }
      
         return new Activity();
-    }
+    }    
 }

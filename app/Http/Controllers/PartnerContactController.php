@@ -34,13 +34,14 @@ class PartnerContactController extends Controller
         $event_id = $input['event_id'];
 
         $event = new Event();
-       // $event = Event::find($event_id);
+        $event = Event::find($event_id);
 
         $user = new User();
        // $user = new App\User::find($event->user_id);
         $user = User::find(2);
 
-        Mail::to($user->email)->send(new PartnerContact($user->name, $name, $cellphone, $email));
+        Mail::to($user->email)->send(new PartnerContact($user->name, $name, $cellphone, $email, $event));
+        //Mail::to('contacto@mwork.com.ar')->send(new PartnerContact($user->name, $name, $cellphone, $email, $event));
         return $this->sendResponse($user, 'Email enviado correctamente');
     }
 }
